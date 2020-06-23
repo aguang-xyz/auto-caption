@@ -5,7 +5,7 @@ with open("README.md", "r") as readme:
 
 setuptools.setup(
     name="auto-caption",
-    version="0.0.4",
+    version="0.0.5",
     author="Guangrui Wang",
     author_email="aguang.xyz@gmail.com",
     description="Automatic captioning.",
