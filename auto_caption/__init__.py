@@ -48,6 +48,8 @@ def download_model(lang='en'):
 
         with NamedTemporaryFile(suffix='.zip', delete=True) as zip_file:
 
+            print("Speech recognization model for {} is missing.")
+
             resp = requests.get(urls[lang], stream=True)
             total = int(resp.headers.get('content-length', 0))
 
@@ -173,10 +175,11 @@ def auto_caption(video_path, srt_path, lang='en'):
 
 def main():
 
-    args_parser = ArgumentParser()
+    args_parser = ArgumentParser(
+        description="Automatic captioning for movies.")
 
-    args_parser.add_argument("video")
-    args_parser.add_argument("--output")
+    args_parser.add_argument("video", help="The path of input video")
+    args_parser.add_argument("--output", help="The path to write srt output")
 
     args = args_parser.parse_args()
 
@@ -184,3 +187,8 @@ def main():
                                                     args.video)
 
     auto_caption(args.video, output, lang="en")
+
+
+if __name__ == "__main__":
+
+    main()
