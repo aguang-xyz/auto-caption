@@ -5,4 +5,4 @@ from auto_caption import auto_caption
 
 class AutoCaptionTest(TestCase):
     def test_auto_caption(self):
-        auto_caption("./samples/en/1.webm", "./samples/en/1.srt")
+        auto_caption("./samples/en/1.webm", "./samples/en/1.vtt", fmt="vtt")

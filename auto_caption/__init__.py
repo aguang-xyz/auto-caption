@@ -139,7 +139,7 @@ def segment_setences(words, lang="en"):
     return sentences
 
 
-def time2str(x):
+def time2str_srt(x):
 
     return "{hour:02d}:{minute:02d}:{second:02d},{millisecond}".format(
         hour=int(x) // 3600,
@@ -154,11 +154,39 @@ def write_srt_file(sentences, srt_path):
 
         for index, sentence in enumerate(sentences):
             srt_file.write("{}\n{} --> {}\n{}\n\n".format(
-                index + 1, time2str(sentence["start"]),
-                time2str(sentence["end"]), sentence["text"]))
+                index + 1, time2str_srt(sentence["start"]),
+                time2str_srt(sentence["end"]), sentence["text"]))
 
 
-def auto_caption(video_path, srt_path, lang='en'):
+def time2str_vtt(x):
+
+    return "{hour:02d}:{minute:02d}:{second:02d}.{millisecond}".format(
+        hour=int(x) // 3600,
+        minute=(int(x) // 60) % 60,
+        second=int(x) % 60,
+        millisecond=int(x * 1000) % 1000)
+
+
+def write_vtt_file(sentences, vtt_path):
+
+    with open(vtt_path, "w") as vtt_file:
+
+        vtt_file.write("WEBVTT\n\n")
+
+        for index, sentence in enumerate(sentences):
+            vtt_file.write("{}\n{} --> {}\n{}\n\n".format(
+                index + 1, time2str_vtt(sentence["start"]),
+                time2str_vtt(sentence["end"]), sentence["text"]))
+
+
+def write_output(sentences, output_path, fmt="vtt"):
+
+    writters = {"srt": write_srt_file, "vtt": write_vtt_file}
+
+    writters[fmt](sentences, output_path)
+
+
+def auto_caption(video_path, output_path, fmt="vtt", lang='en'):
 
     with NamedTemporaryFile(suffix='.wav', delete=True) as wav_file:
 
@@ -170,7 +198,7 @@ def auto_caption(video_path, srt_path, lang='en'):
 
         sentences = segment_setences(words)
 
-        write_srt_file(sentences, srt_path)
+        write_output(sentences, output_path, fmt)
 
 
 def main():
@@ -179,14 +207,23 @@ def main():
         description="Automatic captioning for movies.")
 
     args_parser.add_argument("video", help="The path of input video")
-    args_parser.add_argument("--output", help="The path to write srt output")
+    args_parser.add_argument("--format",
+                             help="Output format (vtt/srt, default: vtt)")
+    args_parser.add_argument("--output",
+                             help="The path to write subtitle file")
 
     args = args_parser.parse_args()
 
-    output = args.output if args.output else re.sub("\.[^\.]+$", ".srt",
-                                                    args.video)
+    fmt = args.format if args.format else "vtt"
 
-    auto_caption(args.video, output, lang="en")
+    if fmt not in ['srt', 'vtt']:
+        print("Unsupported format: {}", fmt)
+        return
+
+    output = args.output if args.output else re.sub(
+        "\.[^\.]+$", ".{}".format(fmt), args.video)
+
+    auto_caption(args.video, output, fmt=fmt, lang="en")
 
 
 if __name__ == "__main__":
