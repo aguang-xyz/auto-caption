@@ -10,6 +10,7 @@ setuptools.setup(
     author_email="aguang.xyz@gmail.com",
     description="Automatic captioning.",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/aguang-xyz/auto-caption",
     packages=setuptools.find_packages(),
     scripts=["bin/auto-caption"],
