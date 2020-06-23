@@ -7,6 +7,15 @@
 
 ## Install.
 
+### Install ffmpeg first.
+
+
+```bash
+sudo apt install ffmpeg
+```
+
+### Install through pypi.
+
 ```bash
 pip3 install auto-caption
 ```
