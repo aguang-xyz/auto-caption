@@ -48,7 +48,7 @@ def download_model(lang='en'):
 
         with NamedTemporaryFile(suffix='.zip', delete=True) as zip_file:
 
-            print("Speech recognization model for {} is missing.")
+            print("Speech recognization model for {} is missing.".format(lang))
 
             resp = requests.get(urls[lang], stream=True)
             total = int(resp.headers.get('content-length', 0))
@@ -191,7 +191,7 @@ def auto_caption(video_path, output_path, fmt="vtt", lang='en'):
     with NamedTemporaryFile(suffix='.wav', delete=True) as wav_file:
 
         extract_audio(video_path, wav_file.name)
-
+        
         combine_stereos(wav_file.name)
 
         words = recognize_speech(wav_file.name, lang=lang)
