@@ -118,8 +118,6 @@ def segment_setences(words, lang="en"):
 
     splits = NNSplit.load(lang).split([content])
 
-    print(splits)
-
     for tokens2d in tqdm(splits):
         for tokens in tokens2d:
 
