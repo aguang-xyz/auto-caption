@@ -4,10 +4,10 @@ import sys
 import json
 import wave
 import vosk
-import nnsplit
 import requests
 import shutil
 
+from nnsplit import NNSplit
 from pathlib import Path
 from tqdm import tqdm
 from argparse import ArgumentParser
@@ -116,12 +116,14 @@ def segment_setences(words, lang="en"):
 
     left = 0
 
-    for tokens2d in tqdm(nnsplit.NNSplit(lang).split([content])):
+    splits = NNSplit.load(lang).split([content])
+
+    print(splits)
+
+    for tokens2d in tqdm(splits):
         for tokens in tokens2d:
 
-            text = "".join(
-                map(lambda token: token.text + token.whitespace,
-                    tokens)).strip()
+            text = "".join(map(lambda token: str(token), tokens)).strip()
 
             right = min(len(words), left + len(tokens)) - 1
 
@@ -191,7 +193,7 @@ def auto_caption(video_path, output_path, fmt="vtt", lang='en'):
     with NamedTemporaryFile(suffix='.wav', delete=True) as wav_file:
 
         extract_audio(video_path, wav_file.name)
-        
+
         combine_stereos(wav_file.name)
 
         words = recognize_speech(wav_file.name, lang=lang)
