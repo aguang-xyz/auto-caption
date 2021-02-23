@@ -141,7 +141,7 @@ def segment_setences(words, lang="en"):
 
 def time2str_srt(x):
 
-    return "{hour:02d}:{minute:02d}:{second:02d},{millisecond}".format(
+    return "{hour:02d}:{minute:02d}:{second:02d},{millisecond:03d}".format(
         hour=int(x) // 3600,
         minute=(int(x) // 60) % 60,
         second=int(x) % 60,
@@ -160,7 +160,7 @@ def write_srt_file(sentences, srt_path):
 
 def time2str_vtt(x):
 
-    return "{hour:02d}:{minute:02d}:{second:02d}.{millisecond}".format(
+    return "{hour:02d}:{minute:02d}:{second:02d}.{millisecond:03d}".format(
         hour=int(x) // 3600,
         minute=(int(x) // 60) % 60,
         second=int(x) % 60,
